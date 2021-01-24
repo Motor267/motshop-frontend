@@ -137,14 +137,14 @@
                                 <v-btn
                                 
                                 color="FFFFFF"
-                                @click="resetForm()"
+                                @click="dialog=false"
                                 >
                                     Cancelar
                                 </v-btn>
 
                                 <v-btn
                                 color="FFFFFF"
-                                @click="createOrder()"
+                                @click="createOrder(order)"
                                 >
                                     Pagar
                                 </v-btn>
@@ -184,10 +184,19 @@ export default {
         ]
     }),
     created(){
+        if(this.activo){
+            this.order = this.user.data
+        }
     },
     computed: {
+         activo() {
+             return this.$store.getters.estaActivo
+         },
          cart() {
              return this.$store.getters.getCart
+         },
+         user() {
+             return this.$store.getters.getUser
          },
          total() {
              let som = this.cart.length;
@@ -198,13 +207,22 @@ export default {
          }
     },
     methods: {
-        createOrder(){
+        createOrder(order){
+            let modifiedValue = {
+                name: order.name,
+                email: order.email,
+                city: order.city,
+                line1: order.line1,
+                line2: order.line2,
+                numCard: order.numCard?order.numCard:'',
+                expDate: order.expDate,
+                productsId: [],
+            }
             let cart = JSON.parse(localStorage.getItem('cart'))
             for(let i=0; i<cart.length; i++){
-                this.order.productsId.push(cart[0].id)
+                modifiedValue.productsId.push(cart[i].id)
             }
-            console.log(this.order);
-            Api().post('/orders', this.order)
+            Api().post('/orders', modifiedValue)
               .then(response => {
                 this.$router.push({name: 'thankyou'});
                 localStorage.removeItem('cart')

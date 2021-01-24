@@ -41,17 +41,18 @@ export default {
         },
     },
     methods: {
-        async checkPage() {
+        checkPage() {
              Api().get('/products')
                 .then(response => {
                     this.products = response.data.products;
-    
                     this.products.filter(p => 
-                    {
-                        const regex = new RegExp(this.search, 'gi')
-                        if(p.name.match(regex)!=null || p.catName.match(regex)!=null){
-                            console.log(p);
-                            this.dataSearch.push(p)
+                    {   try{
+                            const regex = new RegExp(this.search, 'gi')
+                            if(p.name.match(regex)!=null || p.catName.match(regex)!=null){
+                                this.dataSearch.push(p)
+                            }
+                        }catch(e){
+
                         }
                     })
                 })

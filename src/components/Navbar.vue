@@ -25,7 +25,7 @@
         </v-text-field>
         <v-btn
         height="47"
-        :to = "{name: 'search', params: {search}}"
+        @click="searchProduct()"
         >
         <v-icon>
             mdi-magnify
@@ -33,6 +33,7 @@
         </v-btn>
         <!-- /SEARCH BAR -->
         <v-spacer></v-spacer>
+         
         <v-badge
             class="mx-2"
             color="#FF0000"
@@ -42,7 +43,15 @@
                 <v-icon>mdi-cart</v-icon>
             </v-btn>
         </v-badge>
-
+        <v-btn v-if="!activo" icon small :to = "{name: 'login'}">
+            <v-icon>mdi-account</v-icon>
+        </v-btn>
+        <v-btn v-if="activo" icon small :to = "{name: 'profile'}">
+            <v-icon>mdi-account-circle</v-icon>
+        </v-btn>
+        <v-btn v-if="activo" icon small @click="logout()">
+            <v-icon>mdi-logout</v-icon>
+        </v-btn>
         <template v-slot:extension>
           <v-tabs align-with-title>
             <v-tab 
@@ -63,11 +72,12 @@
 
 <script>
 import Api from '@/config/Api'
+import { mapActions } from "vuex";
 export default {
     data() {
         return {
             search: '',
-            categories: []
+            categories: [],
         }
     },
     created() {
@@ -78,8 +88,22 @@ export default {
             
     }, 
     computed: {
+        activo() {
+            return this.$store.getters.estaActivo
+        },
         cart() {
             return this.$store.getters.getCart
+        }
+    },
+    methods: {
+        ...mapActions(['cerrarSesion']),
+        logout(){
+            this.cerrarSesion()
+            this.$router.push({ name: 'home' });
+        },
+        searchProduct(){
+            let search = this.search
+            this.$router.push({ name: 'search', params: {search} });
         }
     }
 }

@@ -5,6 +5,9 @@ import Category from '@/components/Category'
 import Checkout from '@/components/Checkout'
 import Thakyou from '@/components/Thakyou'
 import Search from '@/components/Search'
+import Login from '@/components/Login'
+import Profile from '@/components/Profile'
+import Register from '@/components/Register'
 const routes = [{
         path: '/',
         name: 'home',
@@ -36,9 +39,22 @@ const routes = [{
         path: '/search/:search',
         name: 'search',
         component: Search,
-    }
-
-
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: Login,
+    },
+    {
+        path: '/profile',
+        name: 'profile',
+        component: Profile,
+    }, ,
+    {
+        path: '/register',
+        name: 'register',
+        component: Register,
+    },
 ];
 
 const router = new VueRouter({
